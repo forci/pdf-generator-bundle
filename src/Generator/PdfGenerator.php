@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the ForciPdfGeneratorBundle package.
+ *
+ * (c) Martin Kirilov <wucdbm@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Forci\Bundle\PdfGeneratorBundle\Generator;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -100,7 +109,7 @@ class PdfGenerator {
 
         $replace = sprintf('file://%s/../web/bundles', $this->rootDir);
 
-        $html = str_replace('src="/bundles', 'src="' . $replace, $html);
+        $html = str_replace('src="/bundles', 'src="'.$replace, $html);
 
         return str_replace($find, $replace, $html);
     }
@@ -127,5 +136,4 @@ class PdfGenerator {
     protected function createResult(string $pdfFile, Process $process) {
         return new PdfResult($pdfFile, $process);
     }
-
 }

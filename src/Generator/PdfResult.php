@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the ForciPdfGeneratorBundle package.
+ *
+ * (c) Martin Kirilov <wucdbm@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Forci\Bundle\PdfGeneratorBundle\Generator;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -10,9 +19,9 @@ use Forci\Bundle\PdfGeneratorBundle\Generator\Exception\GenerationFailedExceptio
 
 class PdfResult {
 
-    const ON_ERROR_EMPTY_RESPONSE = 1,
-        ON_ERROR_EXCEPTION = 2,
-        ON_ERROR_500_RESPONSE = 3;
+    const ON_ERROR_EMPTY_RESPONSE = 1;
+    const ON_ERROR_EXCEPTION = 2;
+    const ON_ERROR_500_RESPONSE = 3;
 
     /** @var File */
     protected $file;
@@ -30,6 +39,7 @@ class PdfResult {
 
     /**
      * @return string
+     *
      * @throws GenerationFailedException
      */
     public function realPath(): string {
@@ -40,6 +50,7 @@ class PdfResult {
 
     /**
      * @return string
+     *
      * @throws GenerationFailedException
      */
     public function contents(): string {
@@ -50,6 +61,7 @@ class PdfResult {
      * @param string $location
      *
      * @return $this
+     *
      * @throws GenerationFailedException
      */
     public function copy(string $location) {
@@ -63,6 +75,7 @@ class PdfResult {
      * @param int    $onError
      *
      * @return Response
+     *
      * @throws GenerationFailedException
      */
     public function response(string $filename, $onError = self::ON_ERROR_EMPTY_RESPONSE): Response {
@@ -76,7 +89,7 @@ class PdfResult {
                 case self::ON_ERROR_EXCEPTION:
                     throw $e;
                     break;
-                case self::ON_ERROR_500_RESPONSE;
+                case self::ON_ERROR_500_RESPONSE:
                     return new Response(sprintf("wkhtmltopdf failed: \n\nError Output: \n\n%s\n\nOutput: \n\n%s", $e->getErrorOutput(), $e->getOutput()), Response::HTTP_INTERNAL_SERVER_ERROR);
                     break;
             }
@@ -86,7 +99,7 @@ class PdfResult {
 
         $response = new BinaryFileResponse($this->file);
 
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
         $response->headers->set('Content-Type', 'application/pdf');
 
         return $response;
@@ -104,5 +117,4 @@ class PdfResult {
 
         $this->file = new File($this->path);
     }
-
 }
