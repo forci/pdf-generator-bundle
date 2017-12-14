@@ -10,7 +10,7 @@ By default this bundle uses the `h4cc/wkhtmltopdf-i386` package's binary.
 To use your system binary, add this to your parameters.yml.dist file and do a `composer install`
 
 ```yaml
-    wucdbm_pdf_generator.binary: wkhtmltopdf
+    forci_pdf_generator.binary: wkhtmltopdf
 ```
 
 # Register the bundle in your AppKernel
@@ -20,8 +20,8 @@ To use your system binary, add this to your parameters.yml.dist file and do a `c
 public function registerBundles() {
     $bundles = [
         new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-        // Add WucdbmPdfGeneratorBundle to your AppKernel
-        new \Wucdbm\Bundle\PdfGeneratorBundle\WucdbmPdfGeneratorBundle(),
+        // Add ForciPdfGeneratorBundle to your AppKernel
+        new \Forci\Bundle\PdfGeneratorBundle\ForciPdfGeneratorBundle(),
     ];
 }
 
@@ -31,11 +31,12 @@ public function registerBundles() {
 
 ```php
 <?php 
-/** @var \Wucdbm\Bundle\PdfGeneratorBundle\Generator\PdfGenerator $generator */
-$generator = $container->get('wucdbm_pdf_generator.generator');
+/** @var \Forci\Bundle\PdfGeneratorBundle\Generator\PdfGenerator $generator */
+$generator = $container->get('forci_pdf_generator.generator');
 $filename = 'someFile.pdf';
+$html = 'someHtmlString';
 // Get a PdfResult. The wkPrint and bootstrap methods both return a PdfResult
-/** @var \Wucdbm\Bundle\PdfGeneratorBundle\Generator\PdfResult $result */
+/** @var \Forci\Bundle\PdfGeneratorBundle\Generator\PdfResult $result */
 $result = $generator->wkPrint($html);
 // The PdfResult is the result of the PDF generation. It has access to the temporary PDF file
 $tempPdfPath = $result->realPath();
