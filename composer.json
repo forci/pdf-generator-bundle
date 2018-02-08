@@ -20,7 +20,7 @@
         "wucdbm/php-cs-fixers": "~0.1"
     },
     "autoload": {
-        "psr-4": { "Forci\\Bundle\\PdfGeneratorBundle\\": "src" }
+        "psr-4": { "Forci\\Bundle\\PdfGenerator\\": "src" }
     },
     "config": {
         "bin-dir": "bin"

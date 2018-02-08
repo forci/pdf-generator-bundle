@@ -11,14 +11,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Forci\Bundle\PdfGeneratorBundle\Generator;
+namespace Forci\Bundle\PdfGenerator\Generator;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\RequestContext;
-use Forci\Bundle\PdfGeneratorBundle\Generator\Exception\CouldNotDetermineSchemeAndHostException;
+use Forci\Bundle\PdfGenerator\Generator\Exception\CouldNotDetermineSchemeAndHostException;
 
 class PdfGenerator {
 

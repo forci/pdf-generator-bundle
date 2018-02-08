@@ -11,13 +11,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Forci\Bundle\PdfGeneratorBundle\Generator;
+namespace Forci\Bundle\PdfGenerator\Generator;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Process;
-use Forci\Bundle\PdfGeneratorBundle\Generator\Exception\GenerationFailedException;
+use Forci\Bundle\PdfGenerator\Generator\Exception\GenerationFailedException;
 
 class PdfResult {
 

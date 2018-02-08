@@ -21,7 +21,7 @@ public function registerBundles() {
     $bundles = [
         new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
         // Add ForciPdfGeneratorBundle to your AppKernel
-        new \Forci\Bundle\PdfGeneratorBundle\ForciPdfGeneratorBundle(),
+        new \Forci\Bundle\PdfGenerator\ForciPdfGeneratorBundle(),
     ];
 }
 
@@ -31,12 +31,12 @@ public function registerBundles() {
 
 ```php
 <?php 
-/** @var \Forci\Bundle\PdfGeneratorBundle\Generator\PdfGenerator $generator */
+/** @var \Forci\Bundle\PdfGenerator\Generator\PdfGenerator $generator */
 $generator = $container->get('forci_pdf_generator.generator');
 $filename = 'someFile.pdf';
 $html = 'someHtmlString';
 // Get a PdfResult. The wkPrint and bootstrap methods both return a PdfResult
-/** @var \Forci\Bundle\PdfGeneratorBundle\Generator\PdfResult $result */
+/** @var \Forci\Bundle\PdfGenerator\Generator\PdfResult $result */
 $result = $generator->wkPrint($html);
 // The PdfResult is the result of the PDF generation. It has access to the temporary PDF file
 $tempPdfPath = $result->realPath();

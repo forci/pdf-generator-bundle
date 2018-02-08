@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Forci\Bundle\PdfGeneratorBundle;
+namespace Forci\Bundle\PdfGenerator;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

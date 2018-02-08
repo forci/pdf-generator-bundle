@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Forci\Bundle\PdfGeneratorBundle\Generator\Exception;
+namespace Forci\Bundle\PdfGenerator\Generator\Exception;
 
 class GenerationFailedException extends \Exception {
 
