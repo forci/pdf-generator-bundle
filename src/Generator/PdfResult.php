@@ -21,11 +21,11 @@ use Symfony\Component\Process\Process;
 
 class PdfResult {
 
-    const RESPONSE_TYPE_NORMAL = 1,
-        RESPONSE_TYPE_BINARY = 2,
-        RESPONSE_ON_ERROR_EMPTY_RESPONSE = 4,
-        RESPONSE_ON_ERROR_EXCEPTION = 8,
-        RESPONSE_ON_ERROR_500_RESPONSE = 16;
+    const RESPONSE_TYPE_NORMAL = 1;
+    const RESPONSE_TYPE_BINARY = 2;
+    const RESPONSE_ON_ERROR_EMPTY_RESPONSE = 4;
+    const RESPONSE_ON_ERROR_EXCEPTION = 8;
+    const RESPONSE_ON_ERROR_500_RESPONSE = 16;
 
     /** @var File */
     protected $file;
@@ -88,7 +88,7 @@ class PdfResult {
 
     /**
      * @param string $filename Downloaded file name
-     * @param int    $flags any combination of RESPONSE_TYPE_* and RESPONSE_ON_* flags
+     * @param int    $flags    any combination of RESPONSE_TYPE_* and RESPONSE_ON_* flags
      *
      * @return Response
      *
@@ -115,13 +115,13 @@ class PdfResult {
 
         if ($flags & self::RESPONSE_TYPE_NORMAL) {
             $response = new Response(file_get_contents($this->realPath()));
-        } else if ($flags & self::RESPONSE_TYPE_BINARY) {
+        } elseif ($flags & self::RESPONSE_TYPE_BINARY) {
             $response = new BinaryFileResponse($this->file);
         } else {
             $response = new BinaryFileResponse($this->file);
         }
 
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
         $response->headers->set('Content-Type', 'application/pdf');
 
         return $response;
