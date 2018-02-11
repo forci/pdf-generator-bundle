@@ -54,8 +54,8 @@ class PdfGenerator {
         $this->requestStack = $requestStack;
     }
 
-    public function bootstrap(string $html): PdfResult {
-        return $this->wkPrint($this->layoutBootstrap($html));
+    public function bootstrap(string $html, bool $cleanupOnTerminate = true): PdfResult {
+        return $this->wkPrint($this->layoutBootstrap($html), $cleanupOnTerminate);
     }
 
     public function wkPrint(string $html, bool $cleanupOnTerminate = true): PdfResult {
