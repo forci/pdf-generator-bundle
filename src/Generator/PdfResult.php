@@ -13,30 +13,44 @@
 
 namespace Forci\Bundle\PdfGenerator\Generator;
 
+use Forci\Bundle\PdfGenerator\Generator\Exception\GenerationFailedException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Process\Process;
-use Forci\Bundle\PdfGenerator\Generator\Exception\GenerationFailedException;
 
 class PdfResult {
 
-    const ON_ERROR_EMPTY_RESPONSE = 1;
-    const ON_ERROR_EXCEPTION = 2;
-    const ON_ERROR_500_RESPONSE = 3;
+    const RESPONSE_TYPE_NORMAL = 1,
+        RESPONSE_TYPE_BINARY = 2,
+        RESPONSE_ON_ERROR_EMPTY_RESPONSE = 4,
+        RESPONSE_ON_ERROR_EXCEPTION = 8,
+        RESPONSE_ON_ERROR_500_RESPONSE = 16;
 
     /** @var File */
     protected $file;
 
     /** @var string */
-    protected $path;
+    protected $pdfFilePath;
+
+    /** @var string */
+    protected $htmlFilePath;
 
     /** @var Process */
     protected $process;
 
-    public function __construct(string $path, Process $process) {
-        $this->path = $path;
+    public function __construct(string $pdfFilePath, string $htmlFilePath, Process $process) {
+        $this->pdfFilePath = $pdfFilePath;
+        $this->htmlFilePath = $htmlFilePath;
         $this->process = $process;
+    }
+
+    public function pdfPath(): string {
+        return $this->pdfFilePath;
+    }
+
+    public function htmlPath(): string {
+        return $this->htmlFilePath;
     }
 
     /**
@@ -73,35 +87,41 @@ class PdfResult {
     }
 
     /**
-     * @param string $filename
-     * @param int    $onError
+     * @param string $filename Downloaded file name
+     * @param int    $flags any combination of RESPONSE_TYPE_* and RESPONSE_ON_* flags
      *
      * @return Response
      *
      * @throws GenerationFailedException
      */
-    public function response(string $filename, $onError = self::ON_ERROR_EMPTY_RESPONSE): Response {
+    public function response(string $filename, int $flags = self::RESPONSE_ON_ERROR_EMPTY_RESPONSE): Response {
         try {
             $this->wait();
         } catch (GenerationFailedException $e) {
-            switch ($onError) {
-                case self::ON_ERROR_EMPTY_RESPONSE:
-                    return new Response();
-                    break;
-                case self::ON_ERROR_EXCEPTION:
-                    throw $e;
-                    break;
-                case self::ON_ERROR_500_RESPONSE:
-                    return new Response(sprintf("wkhtmltopdf failed: \n\nError Output: \n\n%s\n\nOutput: \n\n%s", $e->getErrorOutput(), $e->getOutput()), Response::HTTP_INTERNAL_SERVER_ERROR);
-                    break;
+            if ($flags & self::RESPONSE_ON_ERROR_EMPTY_RESPONSE) {
+                return new Response();
+            }
+
+            if ($flags & self::RESPONSE_ON_ERROR_EXCEPTION) {
+                throw $e;
+            }
+
+            if ($flags & self::RESPONSE_ON_ERROR_500_RESPONSE) {
+                return new Response(sprintf("wkhtmltopdf failed: \n\nError Output: \n\n%s\n\nOutput: \n\n%s", $e->getErrorOutput(), $e->getOutput()), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
 
             return new Response();
         }
 
-        $response = new BinaryFileResponse($this->file);
+        if ($flags & self::RESPONSE_TYPE_NORMAL) {
+            $response = new Response(file_get_contents($this->realPath()));
+        } else if ($flags & self::RESPONSE_TYPE_BINARY) {
+            $response = new BinaryFileResponse($this->file);
+        } else {
+            $response = new BinaryFileResponse($this->file);
+        }
 
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$filename);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
         $response->headers->set('Content-Type', 'application/pdf');
 
         return $response;
@@ -117,6 +137,6 @@ class PdfResult {
             throw GenerationFailedException::create($this->process->getOutput(), $this->process->getErrorOutput());
         }
 
-        $this->file = new File($this->path);
+        $this->file = new File($this->pdfFilePath);
     }
 }

@@ -58,7 +58,7 @@ class PdfGenerator {
         return $this->wkPrint($this->layoutBootstrap($html));
     }
 
-    public function wkPrint(string $html): PdfResult {
+    public function wkPrint(string $html, bool $cleanupOnTerminate = true): PdfResult {
         $html = $this->replaceUrlsWithFilesystemPath($html);
 
         $cwd = sprintf('%s/wkhtmltopdf', $this->cacheDir);
@@ -79,17 +79,21 @@ class PdfGenerator {
         $process = new Process($command);
         $process->start();
 
-        $this->eventDispatcher->addListener(KernelEvents::TERMINATE, function () use ($htmlFile, $pdfFile) {
-            if (file_exists($htmlFile)) {
-                unlink($htmlFile);
-            }
+        $result = $this->createResult($pdfFile, $htmlFile, $process);
 
-            if (file_exists($pdfFile)) {
-                unlink($pdfFile);
-            }
-        }, 255);
+        if ($cleanupOnTerminate) {
+            $this->eventDispatcher->addListener(KernelEvents::TERMINATE, function () use ($result) {
+                if (file_exists($result->htmlPath())) {
+                    unlink($result->htmlPath());
+                }
 
-        return $this->createResult($pdfFile, $process);
+                if (file_exists($result->pdfPath())) {
+                    unlink($result->pdfPath());
+                }
+            }, 255);
+        }
+
+        return $result;
     }
 
     protected function layoutBootstrap(string $html): string {
@@ -135,7 +139,7 @@ class PdfGenerator {
         throw new CouldNotDetermineSchemeAndHostException();
     }
 
-    protected function createResult(string $pdfFile, Process $process) {
-        return new PdfResult($pdfFile, $process);
+    protected function createResult(string $pdfFile, string $htmlFile, Process $process) {
+        return new PdfResult($pdfFile, $htmlFile, $process);
     }
 }
