@@ -17,4 +17,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ForciPdfGeneratorBundle extends Bundle {
 
-    }
+}

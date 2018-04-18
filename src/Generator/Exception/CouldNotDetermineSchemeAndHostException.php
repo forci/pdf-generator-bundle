@@ -15,4 +15,4 @@ namespace Forci\Bundle\PdfGenerator\Generator\Exception;
 
 class CouldNotDetermineSchemeAndHostException extends \Exception {
 
-    }
+}
