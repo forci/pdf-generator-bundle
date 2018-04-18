@@ -59,7 +59,7 @@ class PdfGenerator {
     }
 
     public function bootstrap4(string $html, bool $cleanupOnTerminate = true): PdfResult {
-        return $this->wkPrint($this->layoutBootstrap($html), $cleanupOnTerminate);
+        return $this->wkPrint($this->layoutBootstrap4($html), $cleanupOnTerminate);
     }
 
     public function wkPrint(string $html, bool $cleanupOnTerminate = true): PdfResult {
