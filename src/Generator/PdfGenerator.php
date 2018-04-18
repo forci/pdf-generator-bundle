@@ -58,6 +58,10 @@ class PdfGenerator {
         return $this->wkPrint($this->layoutBootstrap($html), $cleanupOnTerminate);
     }
 
+    public function bootstrap4(string $html, bool $cleanupOnTerminate = true): PdfResult {
+        return $this->wkPrint($this->layoutBootstrap($html), $cleanupOnTerminate);
+    }
+
     public function wkPrint(string $html, bool $cleanupOnTerminate = true): PdfResult {
         $html = $this->replaceUrlsWithFilesystemPath($html);
 
@@ -102,6 +106,14 @@ class PdfGenerator {
         ];
 
         return $this->twig->render('@ForciPdfGenerator/layout_bootstrap.html.twig', $data);
+    }
+
+    protected function layoutBootstrap4(string $html): string {
+        $data = [
+            'html' => $html
+        ];
+
+        return $this->twig->render('@ForciPdfGenerator/layout_bootstrap4.html.twig', $data);
     }
 
     protected function replaceUrlsWithFilesystemPath($html): string {
