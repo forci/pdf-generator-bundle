@@ -9,7 +9,7 @@
 
     <services>
 
-        <service id="forci_pdf_generator.generator" class="Forci\Bundle\PdfGenerator\Generator\PdfGenerator">
+        <service id="forci_pdf_generator.generator" class="Forci\Bundle\PdfGenerator\Generator\PdfGenerator" public="true">
             <argument>%kernel.cache_dir%</argument>
             <argument>%kernel.root_dir%</argument>
             <argument>%forci_pdf_generator.binary%</argument>
