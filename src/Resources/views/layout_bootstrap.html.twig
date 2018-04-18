@@ -5,8 +5,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>PDF</title>
-        <link href="{{ absolute_url(asset('bundles/forcipdfgenerator/bootstrap-3.3.7/css/bootstrap.css')) }}" rel="stylesheet">
-        <link href="{{ absolute_url(asset('bundles/forcipdfgenerator/bootstrap-3.3.7/css/bootstrap-theme.css')) }}" rel="stylesheet">
+        <style type="text/css">
+            {{ 'bootstrap-3.3.7/css/bootstrap.css'|readPdfGeneratorAsset }}
+            {{ 'bootstrap-3.3.7/css/bootstrap-theme.css'|readPdfGeneratorAsset }}
+        </style>
     </head>
     <body>
         <div class="container">

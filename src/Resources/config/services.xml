@@ -20,5 +20,9 @@
         </service>
         <service id="forci_pdf_generator.generator" alias="Forci\Bundle\PdfGenerator\Generator\PdfGenerator"/>
 
+        <service id="Forci\Bundle\PdfGenerator\Twig\ReadAssetExtension">
+            <tag name="twig.extension"/>
+        </service>
+
     </services>
 </container>
