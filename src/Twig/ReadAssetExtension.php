@@ -2,13 +2,16 @@
 
 namespace Forci\Bundle\PdfGenerator\Twig;
 
-class ReadAssetExtension extends \Twig_Extension {
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+
+class ReadAssetExtension extends AbstractExtension {
 
     const ASSETS_DIR = __DIR__ . '/../Resources/public';
 
     public function getFilters() {
         return [
-            new \Twig_SimpleFilter('readPdfGeneratorAsset', [$this, 'readAsset'])
+            new TwigFilter('readPdfGeneratorAsset', [$this, 'readAsset'])
         ];
     }
 
