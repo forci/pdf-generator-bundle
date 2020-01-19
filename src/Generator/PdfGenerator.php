@@ -13,12 +13,13 @@
 
 namespace Forci\Bundle\PdfGenerator\Generator;
 
+use Forci\Bundle\PdfGenerator\Generator\Exception\CouldNotDetermineSchemeAndHostException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\RequestContext;
-use Forci\Bundle\PdfGenerator\Generator\Exception\CouldNotDetermineSchemeAndHostException;
+use Twig\Environment;
 
 class PdfGenerator {
 
@@ -31,7 +32,7 @@ class PdfGenerator {
     /** @var string */
     protected $binary;
 
-    /** @var \Twig_Environment */
+    /** @var Environment */
     protected $twig;
 
     /** @var EventDispatcherInterface */
@@ -43,9 +44,11 @@ class PdfGenerator {
     /** @var RequestContext|null */
     protected $requestContext;
 
-    public function __construct(string $cacheDir, string $rootDir, string $binary,
-                                \Twig_Environment $twig, EventDispatcherInterface $eventDispatcher,
-                                RequestStack $requestStack, RequestContext $requestContext = null) {
+    public function __construct(
+        string $cacheDir, string $rootDir, string $binary,
+        Environment $twig, EventDispatcherInterface $eventDispatcher,
+        RequestStack $requestStack, RequestContext $requestContext = null
+    ) {
         $this->cacheDir = $cacheDir;
         $this->rootDir = $rootDir;
         $this->binary = $binary;
@@ -127,7 +130,7 @@ class PdfGenerator {
 
         $replace = sprintf('file://%s/../web/bundles', $this->rootDir);
 
-        $html = str_replace('src="/bundles', 'src="'.$replace, $html);
+        $html = str_replace('src="/bundles', 'src="' . $replace, $html);
 
         return str_replace($find, $replace, $html);
     }
