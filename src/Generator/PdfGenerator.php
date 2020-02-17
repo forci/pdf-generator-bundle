@@ -27,7 +27,7 @@ class PdfGenerator {
     protected $cacheDir;
 
     /** @var string */
-    protected $rootDir;
+    protected $projectDir;
 
     /** @var string */
     protected $binary;
@@ -45,12 +45,12 @@ class PdfGenerator {
     protected $requestContext;
 
     public function __construct(
-        string $cacheDir, string $rootDir, string $binary,
+        string $cacheDir, string $projectDir, string $binary,
         Environment $twig, EventDispatcherInterface $eventDispatcher,
         RequestStack $requestStack, RequestContext $requestContext = null
     ) {
         $this->cacheDir = $cacheDir;
-        $this->rootDir = $rootDir;
+        $this->projectDir = $projectDir;
         $this->binary = $binary;
         $this->twig = $twig;
         $this->eventDispatcher = $eventDispatcher;
@@ -128,7 +128,7 @@ class PdfGenerator {
 
         $find = sprintf('%s/bundles', $schemeAndHost);
 
-        $replace = sprintf('file://%s/../web/bundles', $this->rootDir);
+        $replace = sprintf('file://%s/web/bundles', $this->projectDir);
 
         $html = str_replace('src="/bundles', 'src="' . $replace, $html);
 

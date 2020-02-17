@@ -4,14 +4,14 @@
 
 
     <parameters>
-        <parameter key="forci_pdf_generator.binary">%kernel.root_dir%/../bin/wkhtmltopdf-i386</parameter>
+        <parameter key="forci_pdf_generator.binary">%kernel.project_dir%/bin/wkhtmltopdf-i386</parameter>
     </parameters>
 
     <services>
 
         <service id="Forci\Bundle\PdfGenerator\Generator\PdfGenerator" public="true">
             <argument>%kernel.cache_dir%</argument>
-            <argument>%kernel.root_dir%</argument>
+            <argument>%kernel.project_dir%</argument>
             <argument>%forci_pdf_generator.binary%</argument>
             <argument type="service" id="twig"/>
             <argument type="service" id="event_dispatcher"/>
