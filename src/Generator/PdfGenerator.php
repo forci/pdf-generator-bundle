@@ -74,22 +74,27 @@ class PdfGenerator {
             mkdir($cwd, 0755, true);
         }
 
-        $tempName = uniqid();
+        $tempName = uniqid('', true);
         $htmlName = sprintf('%s.html', $tempName);
         $pdfName = sprintf('%s.pdf', $tempName);
         $htmlFile = sprintf('%s/%s', $cwd, $htmlName);
         $pdfFile = sprintf('%s/%s', $cwd, $pdfName);
 
         file_put_contents($htmlFile, $html);
-        $command = sprintf('cd %s && xvfb-run -a %s %s %s', escapeshellarg($cwd), escapeshellarg($this->binary), $htmlName, $pdfName);
 
-        $process = new Process($command);
+        $process = new Process([
+            'xvfb-run',
+            '-a',
+            $this->binary,
+            $htmlName,
+            $pdfName
+        ], $cwd);
         $process->start();
 
         $result = $this->createResult($pdfFile, $htmlFile, $process);
 
         if ($cleanupOnTerminate) {
-            $this->eventDispatcher->addListener(KernelEvents::TERMINATE, function () use ($result) {
+            $this->eventDispatcher->addListener(KernelEvents::TERMINATE, static function () use ($result) {
                 if (file_exists($result->htmlPath())) {
                     unlink($result->htmlPath());
                 }
