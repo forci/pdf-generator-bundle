@@ -70,8 +70,8 @@ class PdfGenerator {
 
         $cwd = sprintf('%s/wkhtmltopdf', $this->cacheDir);
 
-        if (!is_dir($cwd)) {
-            mkdir($cwd, 0755, true);
+        if (!is_dir($cwd) && !mkdir($cwd, 0755, true) && !is_dir($cwd)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $cwd));
         }
 
         $tempName = uniqid('', true);
