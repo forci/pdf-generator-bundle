@@ -33,8 +33,12 @@ readonly class PdfGenerator
     ) {
     }
 
-    public function wkPrint(string $html, bool $cleanupOnTerminate = true): PdfResult
-    {
+    public function wkPrint(
+        string $html,
+        /* @var string[] $flags */
+        array $flags,
+        bool $cleanupOnTerminate = true
+    ): PdfResult {
         $html = $this->replaceUrlsWithFilesystemPath($html);
 
         $cwd = sprintf('%s/wkhtmltopdf', $this->cacheDir);
@@ -56,6 +60,7 @@ readonly class PdfGenerator
             '-a',
             $this->binary,
             ...$this->flags,
+            ...$flags,
             $htmlName,
             $pdfName,
         ], $cwd);
