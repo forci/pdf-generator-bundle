@@ -44,7 +44,9 @@ readonly class PdfGenerator
         $cwd = sprintf('%s/wkhtmltopdf', $this->cacheDir);
 
         if (!is_dir($cwd) && !mkdir($cwd, 0755, true) && !is_dir($cwd)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $cwd));
+            throw new \RuntimeException(
+                sprintf('Directory "%s" was not created', $cwd),
+            );
         }
 
         $tempName = uniqid('', true);
@@ -53,7 +55,13 @@ readonly class PdfGenerator
         $htmlFile = sprintf('%s/%s', $cwd, $htmlName);
         $pdfFile = sprintf('%s/%s', $cwd, $pdfName);
 
-        file_put_contents($htmlFile, $html);
+        $isPut = file_put_contents($htmlFile, $html);
+
+        if (false === $isPut) {
+            throw new \RuntimeException(
+                sprintf('Could not write HTML contents to html file "%s"', $htmlFile),
+            );
+        }
 
         $process = new Process([
             'xvfb-run',
