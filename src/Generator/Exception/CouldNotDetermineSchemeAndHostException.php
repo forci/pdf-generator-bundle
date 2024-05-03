@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
  * This file is part of the ForciPdfGeneratorBundle package.
  *
@@ -13,6 +12,6 @@
 
 namespace Forci\Bundle\PdfGenerator\Generator\Exception;
 
-class CouldNotDetermineSchemeAndHostException extends \Exception {
-
+class CouldNotDetermineSchemeAndHostException extends \Exception
+{
 }

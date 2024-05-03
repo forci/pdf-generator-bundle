@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
  * This file is part of the ForciPdfGeneratorBundle package.
  *
@@ -13,48 +12,25 @@
 
 namespace Forci\Bundle\PdfGenerator\Generator\Exception;
 
-class GenerationFailedException extends \Exception {
+class GenerationFailedException extends \Exception
+{
+    private readonly ?string $output;
+    private readonly ?string $errorOutput;
 
-    /** @var string */
-    protected $output;
-
-    /** @var string */
-    protected $errorOutput;
-
-    public static function create(string $output, string $errorOutput) {
-        $instance = new static();
-        $instance->message = $errorOutput;
-        $instance->setOutput($output);
-        $instance->setErrorOutput($errorOutput);
-
-        return $instance;
+    public function __construct(string $message, ?string $output, ?string $errorOutput)
+    {
+        parent::__construct($message);
+        $this->output = $output;
+        $this->errorOutput = $errorOutput;
     }
 
-    /**
-     * @return string
-     */
-    public function getOutput(): string {
+    public function getOutput(): ?string
+    {
         return $this->output;
     }
 
-    /**
-     * @param string $output
-     */
-    public function setOutput(string $output) {
-        $this->output = $output;
-    }
-
-    /**
-     * @return string
-     */
-    public function getErrorOutput(): string {
+    public function getErrorOutput(): ?string
+    {
         return $this->errorOutput;
-    }
-
-    /**
-     * @param string $errorOutput
-     */
-    public function setErrorOutput(string $errorOutput) {
-        $this->errorOutput = $errorOutput;
     }
 }

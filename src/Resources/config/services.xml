@@ -1,7 +1,6 @@
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+<container xmlns="https://symfony.com/schema/dic/services"
+           xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
         <parameter key="forci_pdf_generator.binary">%kernel.project_dir%/bin/wkhtmltopdf-i386</parameter>
@@ -14,16 +13,11 @@
             <argument>%kernel.project_dir%</argument>
             <argument>%forci_pdf_generator.binary%</argument>
             <argument>%forci_pdf_generator.flags%</argument>
-            <argument type="service" id="twig"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="router.request_context" on-invalid="null"/>
         </service>
         <service id="forci_pdf_generator.generator" alias="Forci\Bundle\PdfGenerator\Generator\PdfGenerator"/>
-
-        <service id="Forci\Bundle\PdfGenerator\Twig\ReadAssetExtension">
-            <tag name="twig.extension"/>
-        </service>
 
     </services>
 </container>

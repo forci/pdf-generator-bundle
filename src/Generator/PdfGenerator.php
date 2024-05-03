@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /*
  * This file is part of the ForciPdfGeneratorBundle package.
  *
@@ -19,58 +18,23 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\RequestContext;
-use Twig\Environment;
 
-class PdfGenerator {
-
-    /** @var string */
-    protected $cacheDir;
-
-    /** @var string */
-    protected $projectDir;
-
-    /** @var string */
-    protected $binary;
-
-    /** @var array */
-    protected $flags;
-
-    /** @var Environment */
-    protected $twig;
-
-    /** @var EventDispatcherInterface */
-    protected $eventDispatcher;
-
-    /** @var RequestStack */
-    protected $requestStack;
-
-    /** @var RequestContext|null */
-    protected $requestContext;
-
+readonly class PdfGenerator
+{
     public function __construct(
-        string $cacheDir, string $projectDir, string $binary,
-        array $flags,
-        Environment $twig, EventDispatcherInterface $eventDispatcher,
-        RequestStack $requestStack, RequestContext $requestContext = null
+        private string $cacheDir,
+        private string $projectDir,
+        private string $binary,
+        /** @var string[] */
+        private array $flags,
+        private EventDispatcherInterface $eventDispatcher,
+        private RequestStack $requestStack,
+        private ?RequestContext $requestContext = null
     ) {
-        $this->cacheDir = $cacheDir;
-        $this->projectDir = $projectDir;
-        $this->binary = $binary;
-        $this->flags = $flags;
-        $this->twig = $twig;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->requestStack = $requestStack;
     }
 
-    public function bootstrap(string $html, bool $cleanupOnTerminate = true): PdfResult {
-        return $this->wkPrint($this->layoutBootstrap($html), $cleanupOnTerminate);
-    }
-
-    public function bootstrap4(string $html, bool $cleanupOnTerminate = true): PdfResult {
-        return $this->wkPrint($this->layoutBootstrap4($html), $cleanupOnTerminate);
-    }
-
-    public function wkPrint(string $html, bool $cleanupOnTerminate = true): PdfResult {
+    public function wkPrint(string $html, bool $cleanupOnTerminate = true): PdfResult
+    {
         $html = $this->replaceUrlsWithFilesystemPath($html);
 
         $cwd = sprintf('%s/wkhtmltopdf', $this->cacheDir);
@@ -93,11 +57,11 @@ class PdfGenerator {
             $this->binary,
             ...$this->flags,
             $htmlName,
-            $pdfName
+            $pdfName,
         ], $cwd);
         $process->start();
 
-        $result = $this->createResult($pdfFile, $htmlFile, $process);
+        $result = new PdfResult($pdfFile, $htmlFile, $process);
 
         if ($cleanupOnTerminate) {
             $this->eventDispatcher->addListener(KernelEvents::TERMINATE, static function () use ($result) {
@@ -114,26 +78,11 @@ class PdfGenerator {
         return $result;
     }
 
-    protected function layoutBootstrap(string $html): string {
-        $data = [
-            'html' => $html
-        ];
-
-        return $this->twig->render('@ForciPdfGenerator/layout_bootstrap.html.twig', $data);
-    }
-
-    protected function layoutBootstrap4(string $html): string {
-        $data = [
-            'html' => $html
-        ];
-
-        return $this->twig->render('@ForciPdfGenerator/layout_bootstrap4.html.twig', $data);
-    }
-
-    protected function replaceUrlsWithFilesystemPath($html): string {
+    protected function replaceUrlsWithFilesystemPath(string $html): string
+    {
         try {
             $schemeAndHost = $this->getSchemeAndHttpHost();
-        } catch (CouldNotDetermineSchemeAndHostException $e) {
+        } catch (CouldNotDetermineSchemeAndHostException) {
             return $html;
         }
 
@@ -146,7 +95,11 @@ class PdfGenerator {
         return str_replace($find, $replace, $html);
     }
 
-    protected function getSchemeAndHttpHost(): string {
+    /**
+     * @throws CouldNotDetermineSchemeAndHostException
+     */
+    protected function getSchemeAndHttpHost(): string
+    {
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request) {
@@ -163,9 +116,5 @@ class PdfGenerator {
         }
 
         throw new CouldNotDetermineSchemeAndHostException();
-    }
-
-    protected function createResult(string $pdfFile, string $htmlFile, Process $process) {
-        return new PdfResult($pdfFile, $htmlFile, $process);
     }
 }

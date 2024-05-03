@@ -11,18 +11,19 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
-        "symfony/framework-bundle": "~4.0|~5.0|~6.0",
-        "symfony/process": "~4.0|~5.0|~6.0",
-        "symfony/twig-bundle": "~4.0|~5.0|~6.0",
-        "twig/twig": "~2.0|~3.0"
+        "php": ">=8.3",
+        "symfony/process": "~4.0|~5.0|~6.0|~7.0",
+        "symfony/dependency-injection": "~4.0|~5.0|~6.0|~7.0",
+        "symfony/http-kernel": "~4.0|~5.0|~6.0|~7.0",
+        "symfony/routing": "~4.0|~5.0|~6.0|~7.0",
+        "symfony/config": "~4.0|~5.0|~6.0|~7.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.8",
-        "wucdbm/php-cs-fixers": "~0.1"
+        "friendsofphp/php-cs-fixer": "~3.54",
+        "phpstan/phpstan": "^1.10"
     },
     "suggest": {
-        "h4cc/wkhtmltopdf-i386": "0.12.3"
+        "h4cc/wkhtmltopdf-i386": "0.12.4"
     },
     "autoload": {
         "psr-4": { "Forci\\Bundle\\PdfGenerator\\": "src" }

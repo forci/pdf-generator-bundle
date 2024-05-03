@@ -1,11 +1,22 @@
 <?php declare(strict_types=1);
 
+/*
+ * This file is part of the ForciPdfGeneratorBundle package.
+ *
+ * Copyright (c) Forci Web Consulting Ltd.
+ *
+ * Author Martin Kirilov <martin@forci.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 $date = date('Y');
 $headerComment = <<<COMMENT
-This file is part of the ForciCatchableBundle package.
+This file is part of the ForciPdfGeneratorBundle package.
 
 Copyright (c) Forci Web Consulting Ltd.
 
@@ -17,7 +28,6 @@ COMMENT;
 
 $finder = Finder::create()->in([
     __DIR__ . '/src',
-    __DIR__ . '/tests',
 ]);
 
 return (new Config())
@@ -58,8 +68,8 @@ return (new Config())
         'linebreak_after_opening_tag' => false,
         // Ensure there is no code on the same line as the PHP open tag and it is followed by a blank line.
         'blank_line_after_opening_tag' => false,
-        'strict_types' => 1,
         'declare_strict_types' => true,
     ])
+    ->setRiskyAllowed(true)
     ->setUsingCache(true)
     ->setFinder($finder);
