@@ -17,7 +17,6 @@
             <argument type="service" id="request_stack"/>
             <argument type="service" id="router.request_context" on-invalid="null"/>
         </service>
-        <service id="forci_pdf_generator.generator" alias="Forci\Bundle\PdfGenerator\Generator\PdfGenerator"/>
 
     </services>
 </container>
