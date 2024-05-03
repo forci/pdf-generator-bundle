@@ -13,6 +13,7 @@
             <argument>%kernel.cache_dir%</argument>
             <argument>%kernel.project_dir%</argument>
             <argument>%forci_pdf_generator.binary%</argument>
+            <argument>%forci_pdf_generator.flags%</argument>
             <argument type="service" id="twig"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="request_stack"/>

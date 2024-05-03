@@ -30,6 +30,8 @@ class ForciPdfGeneratorExtension extends Extension {
             new FileLocator(__DIR__.'/../Resources/config')
         );
 
+        $container->setParameter('forci_pdf_generator.flags', []);
+
         $loader->load('services.xml');
     }
 

@@ -32,6 +32,9 @@ class PdfGenerator {
     /** @var string */
     protected $binary;
 
+    /** @var array */
+    protected $flags;
+
     /** @var Environment */
     protected $twig;
 
@@ -46,12 +49,14 @@ class PdfGenerator {
 
     public function __construct(
         string $cacheDir, string $projectDir, string $binary,
+        array $flags,
         Environment $twig, EventDispatcherInterface $eventDispatcher,
         RequestStack $requestStack, RequestContext $requestContext = null
     ) {
         $this->cacheDir = $cacheDir;
         $this->projectDir = $projectDir;
         $this->binary = $binary;
+        $this->flags = $flags;
         $this->twig = $twig;
         $this->eventDispatcher = $eventDispatcher;
         $this->requestStack = $requestStack;
@@ -86,6 +91,7 @@ class PdfGenerator {
             'xvfb-run',
             '-a',
             $this->binary,
+            ...$this->flags,
             $htmlName,
             $pdfName
         ], $cwd);
