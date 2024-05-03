@@ -1,0 +1,13 @@
+parameters:
+    level: 7
+    paths:
+        - src
+    excludePaths:
+        - .php-cs-fixer.dist.php
+    tmpDir: ./var/phpstan
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
+
+#rules:
+#	- Ergebnis\PHPStan\Rules\Files\DeclareStrictTypesRule
