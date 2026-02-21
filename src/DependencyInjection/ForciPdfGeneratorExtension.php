@@ -14,7 +14,7 @@ namespace Forci\Bundle\PdfGenerator\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class ForciPdfGeneratorExtension extends Extension
@@ -22,26 +22,19 @@ class ForciPdfGeneratorExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = [];
+
         foreach ($configs as $subConfig) {
             $config = array_merge($config, $subConfig);
         }
-        $loader = new XmlFileLoader(
+
+        $loader = new PhpFileLoader(
             $container,
             new FileLocator(__DIR__ . '/../Resources/config')
         );
 
         $container->setParameter('forci_pdf_generator.flags', []);
 
-        $loader->load('services.xml');
+        $loader->load('services.php');
     }
 
-    public function getXsdValidationBasePath(): string
-    {
-        return __DIR__ . '/../Resources/config/';
-    }
-
-    public function getNamespace(): string
-    {
-        return 'http://www.example.com/symfony/schema/';
-    }
 }
